@@ -103,6 +103,24 @@ namespace CreditCards.UITests
 
         }
 
+        [Fact]
+        
+        public void DisplayProductAndRates()
+        {
+            using (IWebDriver driver = new ChromeDriver())
+            { 
+                driver.Navigate().GoToUrl(HomeUrl);
+                DemoHelper.Pause();
+
+                IWebElement firstTableCell = driver.FindElement(By.TagName("td"));
+                string firstData = firstTableCell.Text;
+
+                Assert.Equal("Easy Credit Card", firstData);
+
+
+            }
+        }
+
     }
 
 }

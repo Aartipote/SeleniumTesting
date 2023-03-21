@@ -39,16 +39,82 @@ namespace CreditCards.UITests
             using (IWebDriver driver = new ChromeDriver())
             {
                 driver.Navigate().GoToUrl(HomeUrl);
-                DemoHelper.Pause(11000);
+                DemoHelper.Pause(5000);
+
+                IWebElement carouselnext = driver.FindElement(By.CssSelector("[data-slide='next']"));
+                carouselnext.Click();
+                DemoHelper.Pause(1000); //allowing the carousel to load the next page
 
                 IWebElement applyLink = driver.FindElement(By.LinkText("Easy: Apply Now!"));
                 applyLink.Click();
-
-
-                DemoHelper.Pause();
+                DemoHelper.Pause(5000);
 
             }
 
+        }
+
+        [Fact]
+        public void BeInitiatedFromHomePage_CustomerService()
+        {
+            using (IWebDriver driver = new ChromeDriver())
+            {
+                driver.Navigate().GoToUrl(HomeUrl);
+                DemoHelper.Pause(1000);
+
+                IWebElement carouselnext = driver.FindElement(By.CssSelector("[data-slide='next']"));
+                carouselnext.Click();
+                DemoHelper.Pause(1000);
+                carouselnext.Click();       //go to the last silde
+                DemoHelper.Pause(1000);
+
+                IWebElement applybutton = driver.FindElement(By.ClassName("customer-service-apply-now"));
+                applybutton.Click();
+                DemoHelper.Pause();
+
+                Assert.Equal(ApplyUrl, driver.Url);
+                Assert.Equal(PageTitle, driver.Title);
+
+            }
+        }
+
+        [Fact]
+        public void BeInitiatedFromHomePage_RandomGreeting()
+        {
+            using (IWebDriver driver = new ChromeDriver())
+            {
+                driver.Navigate().GoToUrl(HomeUrl);
+                DemoHelper.Pause(1000);
+
+                IWebElement randomgreetinglink = driver.FindElement(By.PartialLinkText("- Apply Now!"));
+                randomgreetinglink.Click();
+                DemoHelper.Pause();
+
+                Assert.Equal(ApplyUrl, driver.Url);
+                Assert.Equal(PageTitle, driver.Title);
+
+            }
+        }
+
+        [Fact]
+
+        public void BeInitiatedFromHomePage_RandomGreeting_UsingXPath()
+        {
+            using (IWebDriver driver = new ChromeDriver())
+            { 
+                driver.Navigate().GoToUrl(HomeUrl);
+                DemoHelper.Pause(1000);
+
+                //could use absolute XPath by copying Xpath using inspect(Developer Tools)
+                //relative XPath was grabbed by using xpather.com
+                //relative XPath query is less brittle than absolute
+                IWebElement randomgreetinglink = driver.FindElement(By.XPath("//a[text()[contains(.,'- Apply Now!')]]"));
+                randomgreetinglink.Click();
+                DemoHelper.Pause();
+
+                Assert.Equal(ApplyUrl, driver.Url);
+                Assert.Equal(PageTitle, driver.Title);
+
+            }
         }
     }
 }
